@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AwadhMed — Sign In / Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#c9a84c;--primary:#1a56c4;--bg:#f4f6fb;--surface:#fff;--text:#1a1a2e;--muted:#9aa5b4;--border:#e8edf5;--error:#e74c3c;--success:#27ae60}
+body{min-height:100vh;background:var(--bg);font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 0%,rgba(201,168,76,0.07),transparent 60%),radial-gradient(ellipse 60% 50% at 80% 100%,rgba(26,86,196,0.07),transparent 60%);pointer-events:none}
+.auth-wrap{width:100%;max-width:460px;position:relative}
+.logo-bar{text-align:center;margin-bottom:32px}
+.logo-icon{width:56px;height:56px;background:linear-gradient(135deg,#1a1a2e,#1a56c4);border-radius:16px;display:inline-flex;align-items:center;justify-content:center;font-size:24px;color:var(--gold);margin-bottom:12px;box-shadow:0 8px 32px rgba(26,86,196,0.25)}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--text);font-weight:600}
+.logo-sub{color:var(--gold);font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:500}
+.card{background:var(--surface);border-radius:20px;padding:36px;box-shadow:0 4px 40px rgba(26,86,196,0.1);border:1px solid var(--border)}
+.tabs{display:flex;background:#f4f6fb;border-radius:12px;padding:4px;margin-bottom:28px;gap:4px}
+.tab-btn{flex:1;padding:10px;border:none;background:transparent;border-radius:9px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;color:var(--muted);transition:all .2s}
+.tab-btn.active{background:#fff;color:var(--primary);box-shadow:0 2px 8px rgba(26,86,196,0.12)}
+.form-group{margin-bottom:18px}
+label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;letter-spacing:0.03em;text-transform:uppercase}
+input,select{width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;background:#fff;color:var(--text);outline:none;transition:border-color .2s}
+input:focus,select:focus{border-color:var(--primary)}
+.input-icon{position:relative}
+.input-icon i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px}
+.input-icon input{padding-left:40px}
+.pw-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--muted);background:none;border:none;font-size:14px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.role-card{border:2px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;text-align:center;transition:all .2s}
+.role-card:hover,.role-card.selected{border-color:var(--primary);background:#f0f5ff}
+.role-card i{font-size:22px;color:var(--primary);margin-bottom:6px}
+.role-card p{font-size:12px;font-weight:600;color:var(--text)}
+.role-card small{color:var(--muted);font-size:11px}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,var(--primary),#0d3a8f);color:#fff}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(26,86,196,0.3)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.msg{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none}
+.msg.error{background:#fef0f0;color:var(--error);border:1px solid #fcc;display:block}
+.msg.success{background:#f0fef4;color:var(--success);border:1px solid #b7f5d0;display:block}
+.back-home{text-align:center;margin-top:20px}
+.back-home a{color:var(--primary);text-decoration:none;font-size:13px;font-weight:500}
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="logo-bar">
+    <div class="logo-icon"><i class="fas fa-heartbeat"></i></div>
+    <div class="logo-name">AwadhMed</div>
+    <div class="logo-sub">Premium Healthcare · Lucknow</div>
+  </div>
+  <div class="card">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm">
+      <div id="loginMsg" class="msg"></div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-icon">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-icon">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+          <button class="pw-toggle" onclick="togglePw('loginPassword',this)"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="loginBtn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+      <div class="divider">or</div>
+      <div style="text-align:center;font-size:12px;color:var(--muted)">Don't have an account? <a href="#" onclick="switchTab('register')" style="color:var(--primary);font-weight:600">Register here</a></div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerForm" style="display:none">
+      <div id="regMsg" class="msg"></div>
+      <div class="form-group">
+        <label>I am a</label>
+        <div class="role-grid">
+          <div class="role-card selected" id="rolePatient" onclick="selectRole('patient')">
+            <i class="fas fa-user"></i><p>Patient</p><small>Book appointments</small>
+          </div>
+          <div class="role-card" id="roleDoctor" onclick="selectRole('doctor')">
+            <i class="fas fa-user-md"></i><p>Doctor</p><small>Manage appointments</small>
+          </div>
+        </div>
+        <input type="hidden" id="regRole" value="patient">
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <div class="input-icon"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Dr. / Your full name"></div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-icon"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="your@email.com"></div>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <div class="input-icon"><i class="fas fa-phone"></i><input type="tel" id="regPhone" placeholder="10-digit mobile number"></div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-icon">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="regPassword" placeholder="Minimum 6 characters">
+          <button class="pw-toggle" onclick="togglePw('regPassword',this)"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="regBtn" onclick="doRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
+    </div>
+  </div>
+  <div class="back-home"><a href="/"><i class="fas fa-arrow-left"></i> Back to AwadhMed</a></div>
+</div>
+
+<script>
+let selectedRole = 'patient';
+
+function switchTab(tab) {
+  document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? '' : 'none';
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (tab==='login'&&i===0)||(tab==='register'&&i===1)));
+}
+
+function selectRole(role) {
+  selectedRole = role;
+  document.getElementById('regRole').value = role;
+  document.getElementById('rolePatient').classList.toggle('selected', role==='patient');
+  document.getElementById('roleDoctor').classList.toggle('selected', role==='doctor');
+}
+
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.innerHTML = inp.type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+}
+
+function showMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.className = `msg ${type}`; el.style.display = 'block';
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) return showMsg('loginMsg', 'Please fill in all fields.', 'error');
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  try {
+    const r = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password }) });
+    const data = await r.json();
+    if (!r.ok) { showMsg('loginMsg', data.error || 'Login failed', 'error'); return; }
+    localStorage.setItem('am_token', data.token);
+    localStorage.setItem('am_user', JSON.stringify(data.user));
+    showMsg('loginMsg', 'Welcome back! Redirecting...', 'success');
+    setTimeout(() => {
+      if (data.user.role === 'admin') window.location.href = '/admin.html';
+      else window.location.href = '/dashboard.html';
+    }, 800);
+  } catch (err) {
+    showMsg('loginMsg', 'Network error. Please try again.', 'error');
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+  }
+}
+
+async function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const role = selectedRole;
+  if (!name || !email || !password) return showMsg('regMsg', 'Please fill all required fields.', 'error');
+  if (password.length < 6) return showMsg('regMsg', 'Password must be at least 6 characters.', 'error');
+  const btn = document.getElementById('regBtn');
+  btn.disabled = true; btn.textContent = 'Creating account...';
+  try {
+    const r = await fetch('/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name, email, phone, password, role }) });
+    const data = await r.json();
+    if (!r.ok) { showMsg('regMsg', data.error || 'Registration failed', 'error'); return; }
+    localStorage.setItem('am_token', data.token);
+    localStorage.setItem('am_user', JSON.stringify(data.user));
+    showMsg('regMsg', 'Account created! Redirecting to dashboard...', 'success');
+    setTimeout(() => { window.location.href = '/dashboard.html'; }, 1000);
+  } catch (err) {
+    showMsg('regMsg', 'Network error. Please try again.', 'error');
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+  }
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('loginForm').style.display !== 'none') doLogin();
+    else doRegister();
+  }
+});
+
+// Redirect if already logged in
+const existingToken = localStorage.getItem('am_token');
+const existingUser = JSON.parse(localStorage.getItem('am_user') || 'null');
+if (existingToken && existingUser) {
+  window.location.href = existingUser.role === 'admin' ? '/admin.html' : '/dashboard.html';
+}
+</script>
+</body>
+</html>
